@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Packaging | Sweets N’ Treats</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/packaging.css' %}">
+</head>
+<body>
+
+  <div class="container">
+    <header class="header">
+      <div class="left-header">
+        <button onclick="window.history.back()" class="back-btn">
+          <i class="fa-solid fa-arrow-left"></i> Back
+        </button>
+        <h1><i class="fa-solid fa-box-open"></i> Packaging</h1>
+      </div>
+
+      <a href="#" class="admin-profile">
+        <span>{{ request.user.username|title }}</span>
+        <i class="fa-solid fa-user"></i>
+      </a>
+    </header>
+
+    <section class="content">
+      <h2>Packaging Materials</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Material</th>
+            <th>Type</th>
+            <th>Stock</th>
+            <th>Last Updated</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pkg in packaging %}
+          <tr>
+            <td>{{ pkg.name }}</td>
+            <td>{{ pkg.type }}</td>
+            <td>{{ pkg.stock }}</td>
+            <td>{{ pkg.updated_at }}</td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="4" class="no-data">No packaging materials found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flavors | Sweets N’ Treats</title>
+  <link rel="stylesheet" href="{% static 'css/flavors.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <button onclick="window.history.back()" class="back-btn">
+        <i class="fa-solid fa-arrow-left"></i> Back
+      </button>
+      <h1><i class="fa-solid fa-ice-cream"></i> Flavors Management</h1>
+      <div class="admin-profile">
+        <span>{{ request.user.username|title }}</span>
+        <i class="fa-solid fa-user"></i>
+      </div>
+    </header>
+
+    <!-- Add Flavor Form -->
+    <section class="add-form">
+      <h2>Add New Flavor</h2>
+      <form method="POST" action="{% url 'add_flavor' %}">
+        {% csrf_token %}
+        <input type="text" name="name" placeholder="Flavor Name" required>
+        <input type="text" name="description" placeholder="Description">
+        <input type="number" name="stock" placeholder="Stock Quantity" min="0" required>
+        <button type="submit" class="add-btn"><i class="fa-solid fa-plus"></i> Add Flavor</button>
+      </form>
+    </section>
+
+    <!-- Flavors Table -->
+    <section class="flavor-list">
+      <h2>Available Flavors</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Flavor Name</th>
+            <th>Description</th>
+            <th>Stock</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for flavor in flavors %}
+          <tr>
+            <td>{{ flavor.id }}</td>
+            <td>{{ flavor.name }}</td>
+            <td>{{ flavor.description }}</td>
+            <td>{{ flavor.stock }}</td>
+            <td class="actions">
+              <a href="{% url 'edit_flavor' flavor.id %}" class="edit-btn"><i class="fa-solid fa-pen"></i></a>
+              <a href="{% url 'delete_flavor' flavor.id %}" class="delete-btn" onclick="return confirm('Are you sure?')"><i class="fa-solid fa-trash"></i></a>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="no-data">No flavors found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+</body>
+</html>
