@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details: {{ flavor.name }} | Sweets N’ Treats</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Tailwind Configuration for Sweets N' Treats Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-coral': '#FF7F50', // Bright, energetic coral
+                        'secondary-treat': '#A52A2A', // Rich brown/red
+                        'bg-light': '#F8F8FF', // Ghost White background
+                        'card-white': '#FFFFFF', // Clean card background
+                        'danger-red': '#DC143C', // Crimson
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-bg-light font-sans antialiased min-h-screen flex items-center justify-center p-4">
+
+    <!-- Detail Card -->
+    <div class="w-full max-w-xl bg-card-white p-8 rounded-xl shadow-2xl border border-gray-100">
+        
+        <!-- Header -->
+        <h1 class="text-3xl font-bold text-secondary-treat mb-6 pb-2 border-b-2 border-primary-coral flex items-center">
+            <i class="fa-solid fa-cookie-bite mr-3 text-primary-coral"></i> {{ flavor.name }} Details
+        </h1>
+        
+        <!-- Details List -->
+        <div class="space-y-4 text-gray-700">
+            <div class="flex justify-between items-center pb-2 border-b border-gray-200">
+                <strong class="text-lg font-semibold">ID:</strong>
+                <span class="text-md">{{ flavor.pk }}</span>
+            </div>
+            
+            <div class="pb-2 border-b border-gray-200">
+                <strong class="text-lg font-semibold block mb-1">Description:</strong>
+                <p class="text-md italic">{{ flavor.description|default:"No description provided." }}</p>
+            </div>
+            
+            <div class="flex justify-between items-center pb-2 border-b border-gray-200">
+                <strong class="text-lg font-semibold">Price:</strong>
+                <span class="text-lg font-bold text-primary-coral">${{ flavor.price }}</span>
+            </div>
+            
+            <div class="flex justify-between items-center pb-2">
+                <strong class="text-lg font-semibold">Currently Available:</strong>
+                {% if flavor.is_available %}
+                    <span class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">Yes ✅</span>
+                {% else %}
+                    <span class="px-3 py-1 text-sm font-semibold rounded-full bg-red-100 text-red-800">No ❌</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="mt-8 flex justify-between space-x-4">
+            <!-- Edit Button -->
+            <a href="{% url 'flavor_update' pk=flavor.pk %}" class="w-1/2 p-3 bg-primary-coral text-white font-semibold rounded-lg shadow-md hover:bg-secondary-treat transition duration-200 text-center flex items-center justify-center">
+                <i class="fa-solid fa-pen mr-2"></i> Edit Flavor
+            </a>
+            
+            <!-- Delete Button (Link to Confirmation Page) -->
+            <a href="{% url 'flavor_delete' pk=flavor.pk %}" class="w-1/2 p-3 bg-danger-red text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-200 text-center flex items-center justify-center">
+                <i class="fa-solid fa-trash mr-2"></i> Delete Flavor
+            </a>
+        </div>
+        
+        <!-- Back Link -->
+        <div class="mt-6 text-center">
+            <a href="{% url 'flavor_list' %}" class="text-gray-500 hover:text-secondary-treat transition duration-200 text-sm">
+                <i class="fa-solid fa-arrow-left mr-1"></i> Back to Flavor List
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

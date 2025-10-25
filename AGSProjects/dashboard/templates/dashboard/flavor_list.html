@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flavors Management | Sweets N’ Treats</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Tailwind Configuration for Sweets N' Treats Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-coral': '#FF7F50', // Bright, energetic coral for accents/buttons
+                        'secondary-treat': '#A52A2A', // Rich brown/red for headings/text
+                        'bg-light': '#F8F8FF', // Ghost White background
+                        'card-white': '#FFFFFF', // Clean card background
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom styles for better aesthetics */
+        .container {
+            max-width: 1200px;
+        }
+        /* Style for the confirmation link to override Tailwind defaults */
+        .actions a:last-child {
+            color: #DC143C; /* Crimson for delete */
+        }
+    </style>
+</head>
+<body class="bg-bg-light font-sans antialiased min-h-screen">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        
+        <!-- Header Bar -->
+        <header class="header flex justify-between items-center py-4 px-6 bg-card-white shadow-md rounded-xl mb-8">
+            <div class="flex items-center space-x-4">
+                <button onclick="window.history.back()" class="back-btn text-secondary-treat hover:text-primary-coral transition duration-150 flex items-center">
+                    <i class="fa-solid fa-arrow-left mr-2"></i> 
+                    <span class="hidden sm:inline">Back</span>
+                </button>
+                <h1 class="text-xl sm:text-2xl font-bold text-secondary-treat flex items-center">
+                    <i class="fa-solid fa-ice-cream mr-3 text-primary-coral"></i> Flavors Management
+                </h1>
+            </div>
+            <div class="admin-profile text-right text-sm sm:text-base">
+                <span class="text-gray-600 font-medium hidden sm:inline">{{ request.user.username|title }}</span>
+                <i class="fa-solid fa-user ml-2 text-primary-coral"></i>
+            </div>
+        </header>
+
+        <!-- Add Flavor Form Section (Card Style) -->
+        <section class="add-form bg-card-white p-6 sm:p-8 rounded-xl shadow-lg mb-8">
+            <h2 class="text-xl sm:text-2xl font-semibold mb-6 text-secondary-treat border-b pb-2">
+                <i class="fa-solid fa-plus-circle mr-2"></i> Add New Flavor
+            </h2>
+            
+            <form method="POST" action="{% url 'flavor_create' %}" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+                {% csrf_token %}
+                
+                <!-- Flavor Name -->
+                <input type="text" name="name" placeholder="Flavor Name" required 
+                       class="md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-primary-coral focus:border-primary-coral">
+                
+                <!-- Description -->
+                <input type="text" name="description" placeholder="Description" 
+                       class="md:col-span-2 p-3 border border-gray-300 rounded-lg focus:ring-primary-coral focus:border-primary-coral">
+                
+                <!-- Price -->
+                <input type="number" step="0.01" name="price" placeholder="Price" min="0" required 
+                       class="md:col-span-1 p-3 border border-gray-300 rounded-lg focus:ring-primary-coral focus:border-primary-coral">
+                
+                <!-- Is Available Checkbox -->
+                <label class="flex items-center space-x-2 text-gray-700">
+                    <input type="checkbox" name="is_available" checked
+                           class="form-checkbox h-5 w-5 text-primary-coral rounded border-gray-300 focus:ring-primary-coral"> 
+                    <span>Is Available</span>
+                </label>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="md:col-span-5 lg:col-span-1 p-3 bg-primary-coral text-white font-semibold rounded-lg shadow-md hover:bg-secondary-treat transition duration-200 flex items-center justify-center">
+                    <i class="fa-solid fa-plus mr-2"></i> Add Flavor
+                </button>
+            </form>
+        </section>
+
+        <!-- Flavors Table (List Display) -->
+        <section class="flavor-list bg-card-white p-6 sm:p-8 rounded-xl shadow-lg overflow-x-auto">
+            <h2 class="text-xl sm:text-2xl font-semibold mb-6 text-secondary-treat border-b pb-2">
+                <i class="fa-solid fa-list-check mr-2"></i> Available Flavors
+            </h2>
+            
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                        <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Flavor Name</th>
+                        <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Description</th>
+                        <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                        <th class="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Available</th>
+                        <th class="px-3 sm:px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-card-white divide-y divide-gray-200">
+                    {% for flavor in object_list %}
+                    <tr class="hover:bg-gray-50 transition duration-150">
+                        <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ flavor.pk }}</td>
+                        
+                        <!-- Flavor Name (Link to Detail Page) -->
+                        <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-secondary-treat font-semibold hover:text-primary-coral">
+                            <a href="{% url 'flavor_detail' pk=flavor.pk %}">{{ flavor.name }}</a>
+                        </td>
+                        
+                        <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 hidden md:table-cell">{{ flavor.description|truncatechars:50 }}</td>
+                        <td class="px-3 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900">${{ flavor.price }}</td> 
+                        
+                        <!-- Availability Status -->
+                        <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
+                            {% if flavor.is_available %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Yes</span>
+                            {% else %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">No</span>
+                            {% endif %}
+                        </td>
+                        
+                        <!-- Actions -->
+                        <td class="actions px-3 sm:px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-3">
+                            <!-- Edit Link -->
+                            <a href="{% url 'flavor_update' pk=flavor.pk %}" class="text-primary-coral hover:text-secondary-treat transition duration-150" title="Edit">
+                                <i class="fa-solid fa-pen"></i>
+                            </a>
+                            <!-- Delete Link -->
+                            <a href="{% url 'flavor_delete' pk=flavor.pk %}" class="text-red-600 hover:text-red-800 transition duration-150" onclick="return confirm('Are you sure you want to delete {{ flavor.name }}?')" title="Delete">
+                                <i class="fa-solid fa-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %} 
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500 font-medium">No flavors found. Start by adding one above!</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+</body>
+</html>

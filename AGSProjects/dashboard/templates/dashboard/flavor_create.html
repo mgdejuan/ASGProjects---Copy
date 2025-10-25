@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create New Flavor</title>
+</head>
+<body>
+    <h1>Create a New Flavor</h1>
+
+    {{ form.errors }}
+
+    <form method="POST" action="{% url 'flavor_create' %}"> 
+        {% csrf_token %}
+
+        {{ form.as_p }} 
+
+        <button type="submit">Save Flavor</button>
+    </form>
+
+    <p><a href="{% url 'flavor_list' %}">Cancel and Go Back to List</a></p>
+
+</body>
+</html>
