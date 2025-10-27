@@ -29,3 +29,23 @@ def log_history(request):
 @login_required
 def about(request):
     return render(request, 'sidebar/about.html')
+
+@login_required
+def flavors(request):
+    return render(request, 'flavors.html')
+
+@login_required
+def ingredients(request):
+    return render(request, 'ingredients.html')
+
+@login_required
+def toppings(request):
+    return render(request, 'toppings.html')
+
+@login_required
+def packaging(request):
+    return render(request, 'packaging.html')
+
+@login_required
+def logout_view(request):
+    return render(request, 'logout_view.html')

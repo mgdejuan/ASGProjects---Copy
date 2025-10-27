@@ -33,24 +33,24 @@
                 </div>
             </header>
 
-            <!-- Cards section -->
+            <!-- Cards section (now clickable) -->
             <section class="cards">
-                <div class="card flavor">
+                <a href="{% url 'flavors' %}" class="card flavor">
                     <i class="fa-solid fa-ice-cream"></i>
                     <p>Flavors</p>
-                </div>
-                <div class="card ingredients">
+                </a>
+                <a href="{% url 'ingredients' %}" class="card ingredients">
                     <i class="fa-solid fa-bowl-food"></i>
                     <p>Ingredients</p>
-                </div>
-                <div class="card toppings">
+                </a>
+                <a href="{% url 'toppings' %}" class="card toppings">
                     <i class="fa-solid fa-cheese"></i>
                     <p>Toppings</p>
-                </div>
-                <div class="card packaging">
+                </a>
+                <a href="{% url 'packaging' %}" class="card packaging">
                     <i class="fa-solid fa-box"></i>
                     <p>Packaging</p>
-                </div>
+                </a>
             </section>
 
             <!-- Log Table -->
