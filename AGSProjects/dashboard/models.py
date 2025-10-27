@@ -1,3 +1,5 @@
+# dashboard/models.py
+
 from django.db import models
 
 class Flavor(models.Model):

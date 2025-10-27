@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit: {{ flavor.name }} | Sweets N’ Treats</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Tailwind Configuration for Sweets N' Treats Theme -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-coral': '#FF7F50', // Bright, energetic coral
+                        'secondary-treat': '#A52A2A', // Rich brown/red
+                        'bg-light': '#F8F8FF', // Ghost White background
+                        'card-white': '#FFFFFF', // Clean card background
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Ensures form fields stretch to full width and look clean */
+        .form-fields p {
+            margin-bottom: 1rem;
+        }
+        .form-fields label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+            color: #A52A2A; /* secondary-treat color */
+        }
+        .form-fields input:not([type="checkbox"]), .form-fields textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .form-fields input:focus, .form-fields textarea:focus {
+            border-color: #FF7F50; /* primary-coral focus ring */
+            box-shadow: 0 0 0 3px rgba(255, 127, 80, 0.5);
+            outline: none;
+        }
+    </style>
+</head>
+<body class="bg-bg-light font-sans antialiased min-h-screen flex items-center justify-center p-4">
+
+    <!-- Edit Card -->
+    <div class="w-full max-w-lg bg-card-white p-8 rounded-xl shadow-2xl border border-gray-100">
+        
+        <!-- Header -->
+        <h1 class="text-3xl font-bold text-secondary-treat mb-6 pb-2 border-b-2 border-primary-coral flex items-center">
+            <i class="fa-solid fa-pen-to-square mr-3 text-primary-coral"></i> Editing: {{ flavor.name }}
+        </h1>
+        
+        <p class="text-gray-600 mb-6">Make your desired changes to the flavor details below.</p>
+        
+        <!-- Edit Form -->
+        <form method="POST">
+            {% csrf_token %}
+            
+            <!-- Renders all form fields (pre-filled by the UpdateView) -->
+            <div class="form-fields">
+                {{ form.as_p }}
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="mt-6 flex flex-col space-y-3">
+                <!-- Submit Button -->
+                <button type="submit" class="w-full p-3 bg-primary-coral text-white font-semibold rounded-lg shadow-md hover:bg-secondary-treat transition duration-200 flex items-center justify-center">
+                    <i class="fa-solid fa-save mr-2"></i> Save Changes
+                </button>
+            
+                <!-- Cancel Link -->
+                <a href="{% url 'flavor_detail' pk=flavor.pk %}" class="text-center p-3 text-gray-600 font-medium rounded-lg hover:bg-gray-100 transition duration-200 border border-gray-300">
+                    <i class="fa-solid fa-xmark mr-1"></i> Cancel Editing
+                </a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>
